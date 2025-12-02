@@ -1,0 +1,185 @@
+{% block content %}
+<h1 class="order-header">Order Details</h1>
+
+<div class="order-summary">
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>Status:</strong> <span class="status {{ order.status|lower }}">{{ order.status }}</span></p>
+    <p><strong>Order Date:</strong> {{ order.order_date }}</p>
+    <p><strong>Total Price:</strong> ${{ order.total_amount }}</p>
+    <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
+</div>
+
+<h2 class="order-items-header">Order Items</h2>
+
+{% if order.order_items.exists %}
+    <table class="order-items-table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.order_items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="no-items">No items in this order.</p>
+{% endif %}
+
+<a href="{% url 'Orders:order_history' %}" class="back-button">Back to Order History</a>
+{% endblock %}
+
+<style>
+    body {
+        font-family: 'Roboto', Arial, sans-serif;
+        background: linear-gradient(135deg, #74ebd5, #acb6e5);
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .order-header {
+        text-align: center;
+        color: #333;
+        margin-top: 50px;
+        font-size: 2.5em;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .order-summary {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        margin: 0 10%;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .order-summary p {
+        font-size: 1.2em;
+        line-height: 1.8;
+        margin: 10px 0;
+    }
+
+    .status {
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .status.pending {
+        background-color: #f7d348;
+        color: #fff;
+    }
+
+    .status.completed {
+        background-color: #4caf50;
+        color: #fff;
+    }
+
+    .status.cancelled {
+        background-color: #e57373;
+        color: #fff;
+    }
+
+    .order-items-header {
+        text-align: center;
+        color: #555;
+        margin-top: 30px;
+        font-size: 2em;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-items-table {
+        width: 90%;
+        margin: 30px auto;
+        border-collapse: collapse;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        border-radius: 12px;
+        overflow: hidden;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .order-items-table th,
+    .order-items-table td {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-items-table th {
+        background: #4caf50;
+        color: #fff;
+        font-size: 1.2em;
+    }
+
+    .order-items-table td {
+        background-color: #fff;
+        color: #555;
+    }
+
+    .order-items-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .no-items {
+        text-align: center;
+        font-size: 1.2em;
+        color: #888;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin: 30px auto;
+        padding: 12px 25px;
+        text-align: center;
+        text-decoration: none;
+        background: #4caf50;
+        color: #fff;
+        font-size: 1.2em;
+        border-radius: 25px;
+        transition: background 0.3s, transform 0.3s;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .back-button:hover {
+        background: #388e3c;
+        transform: translateY(-3px);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .order-summary {
+            margin: 0 5%;
+        }
+
+        .order-items-table {
+            width: 100%;
+        }
+
+        .back-button {
+            font-size: 1em;
+            padding: 10px 20px;
+        }
+    }
+</style>
