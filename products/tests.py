@@ -219,3 +219,48 @@ class ProductListViewTest(TestCase):
         self.assertEqual(products.count(), 1)
         self.assertEqual(products.first().name, "Red Sneakers")
 
+
+class ProductAdvancedFilterTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        Product.objects.create(
+            name="Budget Sneakers",
+            brand="BrandX",
+            product_type="GradeC",
+            size="8",
+            color="Black",
+            year_of_manufacture=2024,
+            price=50.00,
+            rating=4.0,
+        )
+        Product.objects.create(
+            name="Premium Sneakers",
+            brand="BrandX",
+            product_type="GradeC",
+            size="9",
+            color="White",
+            year_of_manufacture=2024,
+            price=200.00,
+            rating=4.9,
+        )
+        Product.objects.create(
+            name="Midrange Sneakers",
+            brand="BrandY",
+            product_type="GradeB",
+            size="10",
+            color="Blue",
+            year_of_manufacture=2023,
+            price=120.00,
+            rating=4.5,
+        )
+
+    def test_filter_by_brand_and_price_range(self):
+        """Check that filtering by brand and price range works"""
+        response = self.client.get(reverse('products:product_list'), {
+            'brand': 'BrandX',
+            'min_price': '40',
+            'max_price': '100',
+        })
+        products = response.context['products']
+        self.assertEqual(products.count(), 1)
+        self.assertEqual(products.first().name, "Budget Sneakers")
