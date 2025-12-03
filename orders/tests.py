@@ -101,3 +101,15 @@ class OrderDetailViewTestCase(TestCase):
         response = self.client.get(reverse('Orders:order_detail', args=[self.order.id]))
 
         self.assertEqual(response.status_code, 404)
+
+
+
+ def test_order_history_view_not_authenticated(self):
+        """
+        Test that unauthenticated users are redirected to login when accessing order history.
+        """
+        response = self.client.get(reverse('Orders:order_history'))
+        self.assertRedirects(
+            response,
+            f"{reverse('users:login')}?next={reverse('Orders:order_history')}"
+        )
