@@ -15,9 +15,8 @@ urlpatterns = [
     path('promotions/', include('promotions.urls')),
     path('cart/', include('cart.urls')),
     path('payment/', include('payment.urls')),   
+    
 ]
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-

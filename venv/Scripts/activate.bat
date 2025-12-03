@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\sneakpick\sneakpick0\shoes\venv
+set VIRTUAL_ENV=D:\0aditto\SneakPick\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
