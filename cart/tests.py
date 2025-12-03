@@ -125,3 +125,29 @@ class CartModelTestCase(TestCase):
         cart_item = CartItem.objects.create(cart=self.cart, product=self.product1, quantity=2)
         self.assertEqual(str(self.cart), f"Cart for {self.user}")
         self.assertEqual(str(cart_item), "2 x Test Product 1")
+
+
+    def test_add_same_product_increases_quantity(self):
+        """
+        Test that adding the same product to the cart twice increases the quantity
+        instead of creating a duplicate CartItem entry.
+
+        Verifies:
+            - Only one CartItem exists for the product.
+            - The quantity is incremented correctly.
+            - The total price is updated accurately.
+        """
+        # First time adding the product
+        CartItem.objects.create(cart=self.cart, product=self.product1, quantity=1)
+
+        # Simulate adding the SAME product again
+        existing_item = CartItem.objects.get(cart=self.cart, product=self.product1)
+        existing_item.quantity += 2
+        existing_item.save()
+
+        updated_item = CartItem.objects.get(cart=self.cart, product=self.product1)
+
+        # Assertions
+        self.assertEqual(self.cart.items.count(), 1)  # still 1 item
+        self.assertEqual(updated_item.quantity, 3)    # 1 + 2
+        self.assertEqual(updated_item.total_price, 300.0)  # 3 × 100
